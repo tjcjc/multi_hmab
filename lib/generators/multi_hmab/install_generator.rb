@@ -1,11 +1,11 @@
 module MultiHmab
   module Generators
-    class InitializerGererator < ActiveRecord::Generators::NamedBase
+    class InstallGenerator < Rails::Generators::NamedBase
       source_root File.expand_path("../templates", __FILE__)
 
       def generate_model_and_migration
         multi_end, single_end = singular_table_name.split("_")
-        run_ruby_script("rails g model #{class_name} #{multi_end}:references #{single_end}:references relation_type:integer")
+        run("rails g model #{class_name} #{multi_end}:references #{single_end}:references relation_type:integer")
       end
 
       #def generate_model
