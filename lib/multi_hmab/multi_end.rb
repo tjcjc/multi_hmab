@@ -26,11 +26,11 @@ module MultiEnd
           end
 
           def #{k.underscore.gsub("ing", "")}_#{single}(#{single})
-            #{though.camelize}.create(:#{mul}_id => self.id, :#{single}_id => #{single}.id, :relation_type => #{v})
+            #{through.camelize}.create(:#{mul}_id => self.id, :#{single}_id => #{single}.id, :relation_type => #{v})
           end
 
           def un#{k.underscore.gsub("ing", "")}_#{single}(#{single})
-            item = #{though.camelize}.where(:#{mul}_id => self.id, :#{single}_id => #{single}.id, :relation_type => #{v}).first
+            item = #{through.camelize}.where(:#{mul}_id => self.id, :#{single}_id => #{single}.id, :relation_type => #{v}).first
             item.delete if item
           end
         END

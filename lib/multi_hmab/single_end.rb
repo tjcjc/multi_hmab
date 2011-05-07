@@ -9,7 +9,7 @@ module SingleEnd
   end # self.included
 
   module ClassMethods
-    def single_end(though = "", type =[])
+    def single_end(through = "", type =[])
       join_table = (through + "s").to_sym
       mul, single = through.split("_")
       has_many join_table
