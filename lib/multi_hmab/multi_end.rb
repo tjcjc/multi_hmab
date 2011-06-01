@@ -10,12 +10,12 @@ module MultiEnd
 
   module ClassMethods
     def multi_end(through = "", type = [])
-      join_table = (through + "s").to_sym
+      join_table = through + "s"
       mul, single = through.split("_")
-      has_many join_table
+      has_many join_table.to_sym
       self.class_eval <<-END
-        def relate_#{single}(type)
-          #{single.camelize}.joins(#{join_table}).where("#{join_table}.#{mul}_id = ? and #{join_table}.relation_type = ?", self.id, type)
+        def relate_#{single}s(type)
+          #{single.camelize}.joins(:#{join_table}).where("#{join_table}.#{mul}_id = ? and #{join_table}.relation_type = ?", self.id, type)
         end
       END
 
@@ -32,6 +32,10 @@ module MultiEnd
           def un#{k.underscore.gsub("ing", "")}_#{single}(#{single})
             item = #{through.camelize}.where(:#{mul}_id => self.id, :#{single}_id => #{single}.id, :relation_type => #{v}).first
             item.delete if item
+          end
+
+          def #{k.underscore.gsub("ing", "ed")}_#{single}?(#{single})
+            #{through.camelize}.where(:#{single}_id => #{single}.id, :#{mul}_id => self.id).present?
           end
         END
       end

@@ -10,12 +10,12 @@ module SingleEnd
 
   module ClassMethods
     def single_end(through = "", type =[])
-      join_table = (through + "s").to_sym
+      join_table = through + "s"
       mul, single = through.split("_")
-      has_many join_table
+      has_many join_table.to_sym
       self.class_eval <<-END
         def relate_#{mul}s(type)
-          #{mul.camelize}.joins(#{join_table}).where("#{join_table}.#{single}_id = ? and #{join_table}.relation_type = ?", self.id, type)
+          #{mul.camelize}.joins(:#{join_table}).where("#{join_table}.#{single}_id = ? and #{join_table}.relation_type = ?", self.id, type)
         end
       END
 
