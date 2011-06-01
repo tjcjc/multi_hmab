@@ -25,6 +25,10 @@ module MultiEnd
             relate_#{single}s(#{v})
           end
 
+          def #{k.underscore.gsub("ing", "ed")}_#{single}?(#{single})
+            #{through.camelize}.where(:#{mul}_id => self.id, :#{single}_id => #{single}.id, :relation_type => #{v}).present?
+          end
+
           def #{k.underscore.gsub("ing", "")}_#{single}(#{single})
             #{through.camelize}.create(:#{mul}_id => self.id, :#{single}_id => #{single}.id, :relation_type => #{v})
           end
@@ -32,10 +36,6 @@ module MultiEnd
           def un#{k.underscore.gsub("ing", "")}_#{single}(#{single})
             item = #{through.camelize}.where(:#{mul}_id => self.id, :#{single}_id => #{single}.id, :relation_type => #{v}).first
             item.delete if item
-          end
-
-          def #{k.underscore.gsub("ing", "ed")}_#{single}?(#{single})
-            #{through.camelize}.where(:#{single}_id => #{single}.id, :#{mul}_id => self.id).present?
           end
         END
       end

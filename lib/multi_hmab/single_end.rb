@@ -24,6 +24,10 @@ module SingleEnd
           def #{k.underscore}_#{mul}s
             relate_#{mul}s(#{v})
           end
+
+          def #{k.underscore.gsub("ed", "ing")}_#{mul}?(#{mul})
+            #{through.camelize}.where(:#{mul}_id => #{mul}.id, :#{single}_id => self.id, :relation_type => #{v}).present?
+          end
         END
       end
       
